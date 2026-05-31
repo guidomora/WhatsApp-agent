@@ -178,7 +178,7 @@ Rate limit:
 Uso/billing:
 
 - Valida cupo mensual antes de ejecutar el controller y antes de llamar OpenAI.
-- Si no puede validar cupo de forma confiable, deriva a atencion manual y corta el request.
+- Si no puede validar cupo de forma confiable, deriva a atencion manual y corta el request. Cuando `LARGE_RESERVATION_CONTACT_NUMBER` esta configurado, el mensaje de derivacion incluye ese numero.
 
 Codigo relacionado:
 

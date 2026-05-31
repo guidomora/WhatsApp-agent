@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import {
   DEFAULT_ACCOUNT_ID,
-  WHATSAPP_QUOTA_BLOCKED_REPLY,
+  getWhatsappQuotaBlockedReply,
 } from 'src/modules/billing-usage/constants/billing-usage.constants';
 import { UsageLimitService } from 'src/modules/billing-usage/service/usage-limit.service';
 import { TwilioWebhookPayloadDto } from 'src/lib';
@@ -54,7 +54,7 @@ export class WhatsAppUsageLimitGuard implements CanActivate {
 
   private async notifyQuotaBlocked(waId: string): Promise<void> {
     try {
-      await this.twilioPort.sendText(waId, WHATSAPP_QUOTA_BLOCKED_REPLY);
+      await this.twilioPort.sendText(waId, getWhatsappQuotaBlockedReply());
     } catch (error) {
       this.logger.error(
         `No se pudo enviar notificacion de cupo agotado para ${waId}`,

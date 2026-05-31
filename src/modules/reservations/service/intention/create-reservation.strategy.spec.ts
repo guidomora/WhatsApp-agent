@@ -25,6 +25,7 @@ describe('CreateReservationStrategy', () => {
     'No puedo confirmar nuevas reservas por WhatsApp en este momento. Escribinos por contacto directo y te ayudamos manualmente.';
 
   beforeEach(() => {
+    delete process.env.LARGE_RESERVATION_CONTACT_NUMBER;
     jest.clearAllMocks();
     datesServiceMock = createDatesServiceMock();
     createReservationQueueServiceMock = buildCreateReservationQueueServiceMock();

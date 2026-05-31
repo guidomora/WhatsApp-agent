@@ -33,7 +33,7 @@ Agregar persistencia SQL para planes, suscripciones y consumo mensual, usando Po
 - Si Twilio reintenta o el flujo se reprocesa, el consumo debe registrarse de forma idempotente.
 - El periodo de consumo es mensual calendario.
 - El limite inicial es hard limit: al agotarse el cupo, no se crean nuevas reservas automaticas desde WhatsApp.
-- Al agotarse el cupo, el bot debe responder al primer mensaje entrante con un mensaje claro y derivar a contacto directo/manual, sin llamar OpenAI ni procesar intenciones.
+- Al agotarse el cupo, el bot debe responder al primer mensaje entrante con un mensaje claro y derivar a contacto directo/manual, sin llamar OpenAI ni procesar intenciones. Si existe `LARGE_RESERVATION_CONTACT_NUMBER`, ese numero debe incluirse en la respuesta de derivacion.
 
 ## Modelo de Datos
 
@@ -122,7 +122,7 @@ Para cualquier mensaje entrante de WhatsApp:
 
 1. Los guards validan firma e idempotencia.
 2. Antes de rate limit y antes de ejecutar el controller, `WhatsAppUsageLimitGuard` consulta si la cuenta default puede crear reservas WhatsApp.
-3. Si no hay cupo, no hay suscripcion activa, el plan esta inactivo o PostgreSQL no permite validar el cupo, responde por Twilio con derivacion manual y corta el request con `200 { ok: true }`.
+3. Si no hay cupo, no hay suscripcion activa, el plan esta inactivo o PostgreSQL no permite validar el cupo, responde por Twilio con derivacion manual, incluyendo `LARGE_RESERVATION_CONTACT_NUMBER` cuando esta configurado, y corta el request con `200 { ok: true }`.
 4. Si hay cupo disponible, el mensaje continua al flujo conversacional actual.
 
 Para una creacion desde WhatsApp con cupo disponible:

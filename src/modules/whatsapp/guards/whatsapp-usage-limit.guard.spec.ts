@@ -22,6 +22,7 @@ describe('WhatsAppUsageLimitGuard', () => {
     }) as ExecutionContext;
 
   beforeEach(() => {
+    delete process.env.LARGE_RESERVATION_CONTACT_NUMBER;
     usageLimitServiceMock = createUsageLimitServiceMock();
     twilioPortMock = createTwilioPortMock();
     jest.clearAllMocks();
@@ -54,6 +55,7 @@ describe('WhatsAppUsageLimitGuard', () => {
   });
 
   it('should notify user and short-circuit request when quota is exhausted', async () => {
+    process.env.LARGE_RESERVATION_CONTACT_NUMBER = '11-5555-0000';
     usageLimitServiceMock.canCreateWhatsappReservation.mockResolvedValue({
       allowed: false,
       reason: 'limit_reached',
@@ -69,7 +71,7 @@ describe('WhatsAppUsageLimitGuard', () => {
     );
     expect(twilioPortMock.sendText.mock.calls[0]).toEqual([
       '5491112345678',
-      WHATSAPP_QUOTA_BLOCKED_REPLY,
+      'No puedo confirmar nuevas reservas por WhatsApp en este momento. Comunicate al 11-5555-0000 y te ayudamos manualmente.',
     ]);
   });
 

@@ -17,7 +17,7 @@ import { CreateReservationQueueService } from 'src/modules/reservation-jobs/serv
 import { UsageLimitService } from 'src/modules/billing-usage/service/usage-limit.service';
 import {
   DEFAULT_ACCOUNT_ID,
-  WHATSAPP_QUOTA_BLOCKED_REPLY,
+  getWhatsappQuotaBlockedReply,
 } from 'src/modules/billing-usage/constants/billing-usage.constants';
 import { CreateReservationQueueError } from 'src/modules/reservation-jobs/errors/create-reservation-queue.error';
 
@@ -92,13 +92,14 @@ export class CreateReservationStrategy implements IntentionStrategyInterface {
         });
 
         if (!usageCheck.allowed) {
+          const quotaBlockedReply = getWhatsappQuotaBlockedReply();
           await this.cacheService.appendEntityMessage(
             data.waId,
-            WHATSAPP_QUOTA_BLOCKED_REPLY,
+            quotaBlockedReply,
             RoleEnum.ASSISTANT,
             Intention.CREATE,
           );
-          return { reply: WHATSAPP_QUOTA_BLOCKED_REPLY };
+          return { reply: quotaBlockedReply };
         }
 
         let queueResponse: {

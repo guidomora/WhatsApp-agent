@@ -36,7 +36,7 @@ Crear una reserva desde una conversacion de WhatsApp, pidiendo datos faltantes c
 2. El middleware valida tamano maximo de request.
 3. Los guards validan firma Twilio e idempotencia.
 4. `WhatsAppUsageLimitGuard` valida cupo mensual antes de rate limit, controller, OpenAI y orquestacion.
-5. Si no hay cupo o no se puede validar PostgreSQL, responde por Twilio con derivacion manual y corta el request con `200 { ok: true }`.
+5. Si no hay cupo o no se puede validar PostgreSQL, responde por Twilio con derivacion manual, incluyendo `LARGE_RESERVATION_CONTACT_NUMBER` cuando esta configurado, y corta el request con `200 { ok: true }`.
 6. Si hay cupo disponible, continua el flujo normal y `WhatsAppRateLimitGuard` aplica el rate limit.
 7. El controller normaliza el payload a un formato interno.
 8. `WhatsAppService` agrupa mensajes en rafaga del mismo usuario.
@@ -94,7 +94,7 @@ Crear una reserva desde una conversacion de WhatsApp, pidiendo datos faltantes c
 - Si el mensaje trae multimedia no soportada, se pide texto.
 - Si faltan datos, se pide solo lo faltante.
 - Si ya existe reserva para el mismo telefono y dia, se sugiere modificar.
-- Si no hay suscripcion activa, el plan esta inactivo, el cupo mensual esta agotado o PostgreSQL no puede validar cupo, se bloquea temprano el mensaje WhatsApp y se deriva a atencion manual.
+- Si no hay suscripcion activa, el plan esta inactivo, el cupo mensual esta agotado o PostgreSQL no puede validar cupo, se bloquea temprano el mensaje WhatsApp y se deriva a atencion manual. Si esta configurado, se informa el numero `LARGE_RESERVATION_CONTACT_NUMBER`.
 - Si no hay disponibilidad, se responde con rechazo o alternativas cuando aplique.
 - Si falla la cola antes de encolar o la creacion responde con error despues de consumir cupo, se intenta liberar el consumo reservado.
 - Si falla la espera de un job ya encolado, no se libera automaticamente el consumo para evitar subcontabilizar reservas con resultado desconocido.
