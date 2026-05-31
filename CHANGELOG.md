@@ -1,15 +1,19 @@
 ### History
 
-### 03/05/26
+### 31/05/26
 
-- clean up closedSlots sheet
-- Fixed: what if sending the closed message fails?
+- Added billing and usage limits for WhatsApp reservations
 - TODO:
 - IP-based rate limiting on public endpoints (global + stricter on /webhook). ----> add once is deployed
 - Request timeouts (avoid hanging requests).
 - Token limits per request + reasonable max_tokens per response.
 - Terminate abusive conversations (e.g., flooding or repetitive prompts).
 - Alerts for anomalous spikes (RPS, 429s, 5xx errors, OpenAI cost per minute).
+
+### 03/05/26
+
+- clean up closedSlots sheet
+- Fixed: what if sending the closed message fails?
 
 ### 02/05/26
 
