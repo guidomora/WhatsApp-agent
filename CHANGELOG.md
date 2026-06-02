@@ -1,15 +1,20 @@
 ### History
 
-### 01/06/26
+### 02/06/25
 
-- Added repository and use-case layer to billing module
-- Added test command for billing module
+- Endpoint to show the current usage of the plan 
+- guards moved to common folder to be used by other modules
 - TODO:
 - IP-based rate limiting on public endpoints (global + stricter on /webhook). ----> add once is deployed
 - Request timeouts (avoid hanging requests).
 - Token limits per request + reasonable max_tokens per response.
 - Terminate abusive conversations (e.g., flooding or repetitive prompts).
 - Alerts for anomalous spikes (RPS, 429s, 5xx errors, OpenAI cost per minute).
+
+### 01/06/26
+
+- Added repository and use-case layer to billing module
+- Added test command for billing module
 
 ### 31/05/26
 

@@ -53,6 +53,39 @@ export type BillingQuotaBlockReason =
   | 'inactive_plan'
   | 'limit_reached';
 
+export enum WhatsappReservationQuotaState {
+  AVAILABLE = 'available',
+  NEAR_LIMIT = 'near_limit',
+  EXHAUSTED = 'exhausted',
+  UNLIMITED = 'unlimited',
+  UNAVAILABLE = 'unavailable',
+}
+
+export type WhatsappReservationQuotaUnavailableReason =
+  | 'missing_active_subscription'
+  | 'inactive_plan'
+  | 'invalid_plan_limit';
+
+export type WhatsappReservationQuotaSummaryPlan = {
+  id: string;
+  code: string;
+  name: string;
+  monthlyWhatsappReservationLimit: number | null;
+};
+
+export type WhatsappReservationQuotaSummary = {
+  accountId: string;
+  period: string;
+  periodStart: string | null;
+  periodEnd: string | null;
+  plan: WhatsappReservationQuotaSummaryPlan | null;
+  used: number;
+  remaining: number;
+  overage: number;
+  state: WhatsappReservationQuotaState;
+  unavailableReason?: WhatsappReservationQuotaUnavailableReason;
+};
+
 export type BillingUsageConsumeQuotaParams = {
   accountId: string;
   idempotencyKey: string;

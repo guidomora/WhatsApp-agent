@@ -134,6 +134,11 @@ Responsabilidad:
 - Validar si el canal WhatsApp puede continuar procesando mensajes antes de generar costo conversacional.
 - Consumir cupo de reservas WhatsApp de forma atomica.
 - Liberar cupo si la creacion de reserva falla despues de reservar consumo.
+- Exponer endpoints internos para consultar el cupo mensual de reservas por agente.
+
+Entradas principales:
+
+- `GET /bot/billing-usage/accounts/:accountId/whatsapp-reservation-quota`
 
 Dependencias:
 
@@ -141,6 +146,7 @@ Dependencias:
 
 Archivos clave:
 
+- `src/modules/billing-usage/controller/billing-usage.controller.ts`
 - `src/modules/billing-usage/service/usage-limit.service.ts`
 - `src/modules/billing-usage/application/*.use-case.ts`
 - `src/modules/billing-usage/domain/repository/billing-usage.repository.ts`

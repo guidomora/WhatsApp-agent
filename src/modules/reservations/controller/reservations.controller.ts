@@ -23,6 +23,7 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
+import { InternalApiTokenGuard } from 'src/common/guards/internal-api-token.guard';
 import { INTERNAL_API_TOKEN_HEADER } from 'src/constants';
 import { HttpErrorResponseDto, ValidationErrorResponseDto } from 'src/lib';
 import { ReservationsDashboardService } from '../service/reservations-dashboard.service';
@@ -30,7 +31,6 @@ import { AvailableReservationDatesResponseDto } from '../dto/available-reservati
 import { DailyReservationSlotsResponseDto } from '../dto/daily-reservation-slots-response.dto';
 import { DailyReservationsSummaryResponseDto } from '../dto/daily-reservations-summary-response.dto';
 import { GetDailyReservationsSummaryQueryDto } from '../dto/get-daily-reservations-summary-query.dto';
-import { InternalApiTokenGuard } from '../guards/internal-api-token.guard';
 import { UpdateDashboardReservationDto } from '../dto/update-dashboard-reservation.dto';
 import { UpdateDashboardReservationResponseDto } from '../dto/update-dashboard-reservation-response.dto';
 import { DeleteDashboardReservationDto } from '../dto/delete-dashboard-reservation.dto';
