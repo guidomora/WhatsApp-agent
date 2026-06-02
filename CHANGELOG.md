@@ -1,14 +1,19 @@
 ### History
 
-### 31/05/26
+### 01/06/26
 
-- Added billing and usage limits for WhatsApp reservations
+- Added repository and use-case layer to billing module
+- Added test command for billing module
 - TODO:
 - IP-based rate limiting on public endpoints (global + stricter on /webhook). ----> add once is deployed
 - Request timeouts (avoid hanging requests).
 - Token limits per request + reasonable max_tokens per response.
 - Terminate abusive conversations (e.g., flooding or repetitive prompts).
 - Alerts for anomalous spikes (RPS, 429s, 5xx errors, OpenAI cost per minute).
+
+### 31/05/26
+
+- Added billing and usage limits for WhatsApp reservations
 
 ### 03/05/26
 

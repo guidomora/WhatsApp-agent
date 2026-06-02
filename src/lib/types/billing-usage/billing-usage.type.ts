@@ -47,3 +47,36 @@ export type ReleaseWhatsappReservationQuotaParams = {
 export type ReleaseWhatsappReservationQuotaResult = {
   released: boolean;
 };
+
+export type BillingQuotaBlockReason =
+  | 'missing_active_subscription'
+  | 'inactive_plan'
+  | 'limit_reached';
+
+export type BillingUsageConsumeQuotaParams = {
+  accountId: string;
+  idempotencyKey: string;
+  metadata?: Record<string, unknown>;
+  occurredAt: Date;
+  period: string;
+  planLimit: number;
+};
+
+export type BillingUsageConsumeQuotaResult =
+  | {
+      consumed: true;
+      alreadyConsumed: boolean;
+    }
+  | {
+      consumed: false;
+      reason: 'limit_reached';
+    };
+
+export type BillingUsageReleaseQuotaParams = {
+  accountId: string;
+  idempotencyKey: string;
+};
+
+export type BillingUsageReleaseQuotaResult = {
+  released: boolean;
+};

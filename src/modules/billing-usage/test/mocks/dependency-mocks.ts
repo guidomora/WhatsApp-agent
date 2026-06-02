@@ -1,7 +1,14 @@
 import { BillingPeriodService } from '../../service/billing-period.service';
+import { BillingUsageRepository } from '../../domain/repository/billing-usage.repository';
 import { MonthlyUsage } from '../../entities/monthly-usage.entity';
 import { Subscription } from '../../entities/subscription.entity';
 import { UsageEvent } from '../../entities/usage-event.entity';
+import {
+  BillingUsageConsumeQuotaParams,
+  BillingUsageConsumeQuotaResult,
+  BillingUsageReleaseQuotaParams,
+  BillingUsageReleaseQuotaResult,
+} from 'src/lib';
 import {
   DataSource,
   DeleteResult,
@@ -92,6 +99,36 @@ export const createMonthlyUsageRepositoryMock = (): MonthlyUsageRepositoryMock =
     findOne: jest.fn(),
     save: jest.fn(),
   }) as MonthlyUsageRepositoryMock;
+
+export const createBillingUsageRepositoryMock = (): jest.Mocked<
+  Pick<
+    BillingUsageRepository,
+    | 'findActiveSubscription'
+    | 'findMonthlyUsage'
+    | 'consumeWhatsappReservationQuota'
+    | 'releaseWhatsappReservationQuota'
+  >
+> =>
+  ({
+    findActiveSubscription: jest.fn<Promise<Subscription | null>, [string, Date]>(),
+    findMonthlyUsage: jest.fn<Promise<MonthlyUsage | null>, [string, string]>(),
+    consumeWhatsappReservationQuota: jest.fn<
+      Promise<BillingUsageConsumeQuotaResult>,
+      [BillingUsageConsumeQuotaParams]
+    >(),
+    releaseWhatsappReservationQuota: jest.fn<
+      Promise<BillingUsageReleaseQuotaResult>,
+      [BillingUsageReleaseQuotaParams]
+    >(),
+  }) as jest.Mocked<
+    Pick<
+      BillingUsageRepository,
+      | 'findActiveSubscription'
+      | 'findMonthlyUsage'
+      | 'consumeWhatsappReservationQuota'
+      | 'releaseWhatsappReservationQuota'
+    >
+  >;
 
 export const createDataSourceMock = ({
   subscriptionRepositoryMock,
