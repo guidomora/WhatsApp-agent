@@ -24,7 +24,7 @@ import { GetClosureNotificationFailuresUseCase } from './application/get-closure
 import { OpenDashboardDayUseCase } from './application/open-dashboard-day.use-case';
 import { OpenDashboardSlotUseCase } from './application/open-dashboard-slot.use-case';
 import { reservationsProviders } from './reservations.providers';
-import { InternalApiTokenGuard } from './guards/internal-api-token.guard';
+import { InternalApiTokenGuard } from 'src/common/guards/internal-api-token.guard';
 import { ReservationJobsModule } from '../reservation-jobs/reservation-jobs.module';
 import { BillingUsageModule } from '../billing-usage/billing-usage.module';
 

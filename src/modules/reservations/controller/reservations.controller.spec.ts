@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { InternalApiTokenGuard } from 'src/common/guards/internal-api-token.guard';
 import { ReservationsController } from './reservations.controller';
 import { ReservationsDashboardService } from '../service/reservations-dashboard.service';
-import { InternalApiTokenGuard } from '../guards/internal-api-token.guard';
 
 describe('ReservationsController', () => {
   let controller: ReservationsController;

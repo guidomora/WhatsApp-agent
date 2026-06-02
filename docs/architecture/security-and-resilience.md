@@ -233,6 +233,10 @@ Guard:
 
 - `InternalApiTokenGuard`
 
+Archivo:
+
+- `src/common/guards/internal-api-token.guard.ts`
+
 Header requerido:
 
 - `x-internal-api-token`
@@ -244,6 +248,7 @@ Variable:
 Aplica a:
 
 - Endpoints bajo `Controller('reservations')`, publicados como `/bot/reservations`.
+- `GET /bot/billing-usage/accounts/:accountId/whatsapp-reservation-quota`.
 
 Reglas:
 
@@ -256,6 +261,7 @@ Riesgo que mitiga:
 
 - Acceso publico a operaciones internas de dashboard.
 - Altas, bajas, modificaciones o cierres de agenda no autorizados.
+- Exposicion publica de cupos, planes o consumos mensuales de clientes.
 
 ## Health checks
 

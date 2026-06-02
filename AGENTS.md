@@ -80,7 +80,6 @@ Si se modifica comportamiento, actualizar tambien la documentacion correspondien
 
 <!-- SPECKIT START -->
 
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read `specs/001-billing-layers/plan.md`.
+Active feature plan: `specs/002-limit-endpoint/plan.md`
 
 <!-- SPECKIT END -->
