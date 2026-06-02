@@ -142,6 +142,8 @@ Dependencias:
 Archivos clave:
 
 - `src/modules/billing-usage/service/usage-limit.service.ts`
+- `src/modules/billing-usage/application/*.use-case.ts`
+- `src/modules/billing-usage/domain/repository/billing-usage.repository.ts`
 - `src/modules/billing-usage/service/billing-period.service.ts`
 - `src/modules/billing-usage/entities/*`
 - `src/lib/types/billing-usage/*`
