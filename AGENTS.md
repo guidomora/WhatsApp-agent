@@ -38,6 +38,12 @@ Antes de tocar codigo, revisar la documentacion relevante segun el tipo de cambi
 No duplicar reglas extensas en `AGENTS.md`; mantenerlas en `docs/`.
 Si se modifica comportamiento, actualizar tambien la documentacion correspondiente cuando aplique.
 
+## 2.2) Branches con Spec Kit
+
+- Por defecto, Spec Kit crea branches con prefijo convencional (`feat/`, `fix/`, `chore/`, `refactor/`, etc.) segun `.specify/extensions/git/git-config.yml`.
+- Mantener los directorios de specs con prefijo plano secuencial (`001-feature-name`) para evitar paths anidados y preservar compatibilidad con los comandos de Spec Kit.
+- Si el usuario provee un nombre exacto de branch, usar el override `GIT_BRANCH_NAME` al ejecutar la creacion de feature para que Spec Kit use ese nombre exacto.
+
 ## 3) Convenciones de código
 
 - Mantener TypeScript estricto y tipado explícito cuando agregues APIs/contratos.
