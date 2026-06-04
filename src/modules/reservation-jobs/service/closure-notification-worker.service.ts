@@ -30,7 +30,9 @@ export class ClosureNotificationWorkerService implements OnModuleInit, OnModuleD
       return;
     }
 
-    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'closure-notification-worker',
+    );
     this.worker = new Worker<ClosureNotificationJobData, void>(
       CLOSURE_NOTIFICATION_QUEUE_NAME,
       async (job) => {

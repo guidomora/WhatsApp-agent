@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import IORedis from 'ioredis';
+import IORedis, { RedisOptions } from 'ioredis';
 import { createClient, RedisClientOptions } from 'redis';
 import { ReservationJobsRedisConfig } from 'src/lib';
 
@@ -8,6 +8,7 @@ import { ReservationJobsRedisConfig } from 'src/lib';
 export class ReservationJobsRedisService {
   private readonly logger = new Logger(ReservationJobsRedisService.name);
   private readonly healthcheckTimeoutMs = 2000;
+  private readonly bullMqConnectionNamePrefix = 'reservation-jobs';
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -36,23 +37,54 @@ export class ReservationJobsRedisService {
     };
   }
 
-  createBullMqConnection(): IORedis {
+  createBullMqConnection(connectionName: string): IORedis {
     const config = this.getConfig();
-
-    if (config.url) {
-      return new IORedis(config.url, {
-        maxRetriesPerRequest: null,
-      });
-    }
-
-    return new IORedis({
-      host: config.host,
-      port: config.port,
-      username: config.username,
-      password: config.password,
-      db: config.db,
+    const redisConnectionName = this.buildBullMqConnectionName(connectionName);
+    const commonOptions: RedisOptions = {
+      connectionName: redisConnectionName,
       maxRetriesPerRequest: null,
-      tls: config.tlsEnabled ? {} : undefined,
+      retryStrategy: this.getRetryDelayMs,
+    };
+
+    const connection = config.url
+      ? new IORedis(config.url, commonOptions)
+      : new IORedis({
+          ...commonOptions,
+          host: config.host,
+          port: config.port,
+          username: config.username,
+          password: config.password,
+          db: config.db,
+          tls: config.tlsEnabled ? {} : undefined,
+        });
+
+    this.registerBullMqConnectionListeners(connection, redisConnectionName);
+
+    return connection;
+  }
+
+  private buildBullMqConnectionName(connectionName: string): string {
+    return `${this.bullMqConnectionNamePrefix}:${connectionName}`;
+  }
+
+  private readonly getRetryDelayMs = (times: number): number => {
+    return Math.min(times * 200, 5000);
+  };
+
+  private registerBullMqConnectionListeners(connection: IORedis, connectionName: string): void {
+    connection.on('error', (error) => {
+      const networkError = error as NodeJS.ErrnoException;
+      this.logger.error(
+        `Redis BullMQ connection error connection=${connectionName} code=${networkError.code ?? 'unknown'} message=${error.message}`,
+      );
+    });
+
+    connection.on('reconnecting', (delayMs) => {
+      this.logger.warn(`Redis BullMQ reconnecting connection=${connectionName} delayMs=${delayMs}`);
+    });
+
+    connection.on('ready', () => {
+      this.logger.log(`Redis BullMQ connection ready connection=${connectionName}`);
     });
   }
 

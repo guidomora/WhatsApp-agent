@@ -35,8 +35,12 @@ export class CreateReservationQueueService implements OnModuleInit, OnModuleDest
       return;
     }
 
-    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection();
-    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'create-reservation-producer',
+    );
+    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'create-reservation-events',
+    );
     this.queue = new Queue<CreateReservationJobData, ServiceResponse>(
       CREATE_RESERVATION_QUEUE_NAME,
       {

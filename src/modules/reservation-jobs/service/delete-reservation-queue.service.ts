@@ -29,8 +29,12 @@ export class DeleteReservationQueueService implements OnModuleInit, OnModuleDest
       return;
     }
 
-    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection();
-    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'delete-reservation-producer',
+    );
+    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'delete-reservation-events',
+    );
     this.queue = new Queue<DeleteReservationJobData, string>(DELETE_RESERVATION_QUEUE_NAME, {
       connection: this.producerConnection,
       defaultJobOptions: {

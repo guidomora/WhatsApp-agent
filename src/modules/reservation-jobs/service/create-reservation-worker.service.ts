@@ -28,7 +28,9 @@ export class CreateReservationWorkerService implements OnModuleInit, OnModuleDes
       return;
     }
 
-    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'create-reservation-worker',
+    );
     this.worker = new Worker<CreateReservationJobData, ServiceResponse>(
       CREATE_RESERVATION_QUEUE_NAME,
       async (job) => {

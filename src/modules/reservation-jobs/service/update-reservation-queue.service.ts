@@ -34,8 +34,12 @@ export class UpdateReservationQueueService implements OnModuleInit, OnModuleDest
       return;
     }
 
-    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection();
-    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'update-reservation-producer',
+    );
+    this.eventsConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'update-reservation-events',
+    );
     this.queue = new Queue<UpdateReservationJobData, ServiceResponse>(
       UPDATE_RESERVATION_QUEUE_NAME,
       {

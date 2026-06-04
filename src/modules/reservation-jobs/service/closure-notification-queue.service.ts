@@ -34,7 +34,9 @@ export class ClosureNotificationQueueService implements OnModuleInit, OnModuleDe
       return;
     }
 
-    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.producerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'closure-notification-producer',
+    );
     this.queue = new Queue<ClosureNotificationJobData, void>(CLOSURE_NOTIFICATION_QUEUE_NAME, {
       connection: this.producerConnection,
       defaultJobOptions: {

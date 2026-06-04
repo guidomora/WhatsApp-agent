@@ -28,7 +28,9 @@ export class DeleteReservationWorkerService implements OnModuleInit, OnModuleDes
       return;
     }
 
-    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection();
+    this.workerConnection = this.reservationJobsRedisService.createBullMqConnection(
+      'delete-reservation-worker',
+    );
     this.worker = new Worker<DeleteReservationJobData, string>(
       DELETE_RESERVATION_QUEUE_NAME,
       async (job) => {
