@@ -95,6 +95,10 @@ Codigo relacionado:
 - `src/modules/billing-usage/entities/*`
 - `src/database/migrations/*`
 
+Referencia detallada:
+
+- `docs/architecture/postgresql-schema.md`
+
 ## Disponibilidad
 
 La disponibilidad depende de capacidad efectiva y reservas que se solapan en una franja.

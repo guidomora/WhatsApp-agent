@@ -9,6 +9,7 @@ El objetivo es darle a humanos y agentes un mapa rapido del sistema antes de toc
 - `module-map.md`: responsabilidades, dependencias y archivos clave de cada modulo Nest.
 - `request-flow.md`: flujo principal desde el webhook de WhatsApp hasta la respuesta al usuario.
 - `data-and-state.md`: fuentes de datos, estado temporal, cache, jobs y reglas de consistencia.
+- `postgresql-schema.md`: referencia del esquema PostgreSQL, tablas, columnas, relaciones e indices.
 - `security-and-resilience.md`: guards, rate limits, idempotencia, firmas, limites de request y manejo de fallos de proveedores.
 
 ## Alcance
