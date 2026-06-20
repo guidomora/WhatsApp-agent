@@ -76,6 +76,37 @@ describe('DeleteReservationUseCase', () => {
     );
   });
 
+  it('should delete reservation using the stored name when request name has a typo', async () => {
+    googleSheetsServiceMock.getReservationByDateTimeAndPhone.mockResolvedValue({
+      date: deleteReservationRequestMock.date,
+      time: deleteReservationRequestMock.time,
+      name: 'guido morbito',
+      phone: deleteReservationRequestMock.phone,
+      service: 'cena',
+      quantity: 2,
+    });
+    googleSheetsServiceMock.getDateIndexByData.mockResolvedValue(27);
+    googleSheetsServiceMock.getDatetimeDates.mockResolvedValue(singleReservationSheetRowMock);
+    googleSheetsServiceMock.getAvailabilityFromReservations.mockResolvedValue({
+      reservations: 0,
+      available: 42,
+    });
+
+    await expect(
+      useCase.deleteReservation({
+        ...deleteReservationRequestMock,
+        name: 'guido morabito',
+      }),
+    ).resolves.toBe('Su reserva ha sido cancelada correctamente.');
+
+    expect(googleSheetsServiceMock.getDateIndexByData).toHaveBeenCalledWith({
+      date: deleteReservationRequestMock.date,
+      time: deleteReservationRequestMock.time,
+      name: 'guido morbito',
+      phone: deleteReservationRequestMock.phone,
+    });
+  });
+
   it('should rethrow unexpected errors while deleting reservation', async () => {
     googleSheetsServiceMock.getDateIndexByData.mockRejectedValue(new Error('lookup-failed'));
 

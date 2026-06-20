@@ -52,11 +52,42 @@ export class DeleteReservationStrategy implements IntentionStrategyInterface {
       return { reply: response };
     }
 
-    const response = await this.deleteReservationQueueService.deleteReservation(state);
+    const resolvedReservation = await this.datesService.findReservationByDateAndPhone(
+      state.date!,
+      state.phone!,
+      state.time,
+    );
+
+    if (resolvedReservation === 'ambiguous') {
+      const history = await this.cacheService.getHistory(waId);
+      const response = await this.aiService.getMissingDataToCancel(['time'], history, state);
+      await this.cacheService.appendEntityMessage(
+        waId,
+        response,
+        RoleEnum.ASSISTANT,
+        Intention.CANCEL,
+      );
+      return { reply: response };
+    }
+
+    const resolvedState = !resolvedReservation
+      ? state
+      : {
+          phone: state.phone,
+          date: resolvedReservation.date,
+          time: resolvedReservation.time,
+          name: resolvedReservation.name,
+        };
+
+    const response = await this.deleteReservationQueueService.deleteReservation(resolvedState);
 
     const history = await this.cacheService.getHistory(waId);
 
-    const cancelResponse = await this.aiService.cancelReservationResult(response, history, state);
+    const cancelResponse = await this.aiService.cancelReservationResult(
+      response,
+      history,
+      resolvedState,
+    );
 
     await this.cacheService.appendEntityMessage(
       waId,

@@ -99,7 +99,9 @@ Datos que pueden ayudar a localizarla:
 - Telefono.
 - Fecha original.
 - Hora original.
-- Nombre, si corresponde.
+- Nombre, si corresponde, como dato informativo o de confirmacion.
+
+El nombre no debe ser una llave obligatoria para ubicar la reserva original en flujos conversacionales. Si telefono y fecha identifican una unica reserva, la modificacion puede continuar aunque el nombre enviado no coincida exactamente con el nombre guardado. Si existen varias reservas para el mismo telefono y fecha por datos inconsistentes o carga manual, debe pedirse hora para desambiguar.
 
 Una modificacion puede cambiar:
 
@@ -129,7 +131,9 @@ Datos minimos esperados:
 
 - Telefono.
 - Fecha.
-- Hora o informacion suficiente para desambiguar.
+- Hora solo si telefono y fecha no alcanzan para identificar una unica reserva.
+
+El nombre no debe ser obligatorio para cancelar. Puede usarse como dato de confirmacion, pero errores de tipeo en el nombre no deben impedir la baja cuando telefono y fecha identifican una unica reserva.
 
 Si falta informacion:
 

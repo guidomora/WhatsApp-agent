@@ -458,6 +458,79 @@ describe('DatesService', () => {
     });
   });
 
+  it('should find a unique reservation by date and phone', async () => {
+    googleSheetsServiceMock.getReservationsByDate.mockResolvedValue([
+      {
+        date: existingReservationDateLabelMock,
+        time: '22:00',
+        name: 'guido morbito',
+        phone: '54-9-1154916243',
+        service: 'cena',
+        quantity: 2,
+      },
+    ]);
+
+    await expect(
+      service.findReservationByDateAndPhone(existingReservationDateLabelMock, '1154916243'),
+    ).resolves.toMatchObject({
+      name: 'guido morbito',
+      time: '22:00',
+    });
+  });
+
+  it('should return ambiguous when date and phone match more than one reservation', async () => {
+    googleSheetsServiceMock.getReservationsByDate.mockResolvedValue([
+      {
+        date: existingReservationDateLabelMock,
+        time: '20:00',
+        name: 'guido',
+        phone: '54-9-1154916243',
+        service: 'cena',
+        quantity: 2,
+      },
+      {
+        date: existingReservationDateLabelMock,
+        time: '22:00',
+        name: 'guido',
+        phone: '54-9-1154916243',
+        service: 'cena',
+        quantity: 2,
+      },
+    ]);
+
+    await expect(
+      service.findReservationByDateAndPhone(existingReservationDateLabelMock, '1154916243'),
+    ).resolves.toBe('ambiguous');
+  });
+
+  it('should use time to disambiguate a reservation lookup by date and phone', async () => {
+    googleSheetsServiceMock.getReservationByDateTimeAndPhone.mockResolvedValue({
+      date: existingReservationDateLabelMock,
+      time: '22:00',
+      name: 'guido',
+      phone: '54-9-1154916243',
+      service: 'cena',
+      quantity: 2,
+    });
+
+    await expect(
+      service.findReservationByDateAndPhone(
+        existingReservationDateLabelMock,
+        '1154916243',
+        '22:00',
+      ),
+    ).resolves.toMatchObject({
+      name: 'guido',
+      time: '22:00',
+    });
+
+    expect(googleSheetsServiceMock.getReservationByDateTimeAndPhone).toHaveBeenCalledWith(
+      existingReservationDateLabelMock,
+      '22:00',
+      '54-9-1154916243',
+    );
+  });
+
   it('should delegate updateReservation to its use case', async () => {
     const response = {
       status: StatusEnum.SUCCESS,

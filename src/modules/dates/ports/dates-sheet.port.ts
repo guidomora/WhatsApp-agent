@@ -19,6 +19,7 @@ export interface DatesSheetPort {
     time: string,
     phone: string,
   ): Promise<DashboardReservation | null>;
+  getReservationsByDate(date: string): Promise<DashboardReservation[]>;
   hasReservationByDateAndPhone(
     date: string,
     phone: string,

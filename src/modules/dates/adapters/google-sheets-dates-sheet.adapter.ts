@@ -52,6 +52,10 @@ export class GoogleSheetsDatesSheetAdapter implements DatesSheetPort {
     return this.googleSheetsService.getReservationByDateTimeAndPhone(date, time, phone);
   }
 
+  getReservationsByDate(date: string): Promise<DashboardReservation[]> {
+    return this.googleSheetsService.getReservationsByDate(date);
+  }
+
   hasReservationByDateAndPhone(
     date: string,
     phone: string,

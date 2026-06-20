@@ -24,12 +24,24 @@ export class DeleteReservationUseCase {
     options?: { skipAvailabilityRefresh?: boolean },
   ): Promise<string> {
     const { phone, date, time, name } = deleteReservation;
+    const formattedPhone = phone!;
+    const storedReservation = await this.datesSheetPort.getReservationByDateTimeAndPhone(
+      date!,
+      time!,
+      formattedPhone,
+    );
+    const resolvedName = storedReservation?.name ?? name;
+
+    if (!resolvedName) {
+      this.logger.warn('Alguno de los datos no coincide con la reserva');
+      return 'Algunos de los datos ingresados no coinciden con la reserva.';
+    }
 
     const getIndexParams: GetIndexParams = {
       date: date!,
       time: time!,
-      name: name!.toLowerCase(),
-      phone: phone!,
+      name: resolvedName.toLowerCase(),
+      phone: formattedPhone,
     };
 
     try {
@@ -65,7 +77,7 @@ export class DeleteReservationUseCase {
       }
 
       this.logger.log(
-        `Reserva eliminada correctamente para el dia ${date} a las ${time} para ${phone}`,
+        `Reserva eliminada correctamente para el dia ${date} a las ${time} para ${formattedPhone}`,
         DeleteReservationUseCase.name,
       );
 

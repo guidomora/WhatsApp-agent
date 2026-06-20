@@ -12,6 +12,7 @@ export const updateExtractionPrompt = (context: string) => `
 - Extraer por separado los datos de la reserva actual y los datos nuevos solicitados.
 - Si no puedes inferir un valor con seguridad, usa null.
 - No inventes datos.
+- El nombre de la reserva actual es opcional para identificarla; si aparece, extraelo, pero no lo inventes.
 
 [Contexto de la conversacion]
 === CONTEXTO ===

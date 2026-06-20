@@ -97,19 +97,7 @@ export class UpdateReservationStrategy implements IntentionStrategyInterface {
     );
     let nextState = await this.cacheService.updateUpdateState(waId, mappedState);
 
-    if (
-      nextState.stage === 'identify' &&
-      nextState.currentName &&
-      nextState.phone &&
-      nextState.currentDate &&
-      nextState.currentTime
-    ) {
-      nextState = await this.cacheService.updateUpdateState(waId, {
-        stage: 'reschedule',
-      });
-    }
-
-    const { current, target } = getMissingUpdateFields(nextState);
+    const { current } = getMissingUpdateFields(nextState);
     const history = await this.cacheService.getHistory(waId);
 
     if (current.length > 0) {
@@ -127,7 +115,69 @@ export class UpdateReservationStrategy implements IntentionStrategyInterface {
       return { reply: response };
     }
 
+    if (nextState.stage === 'identify' && nextState.phone && nextState.currentDate) {
+      const resolvedReservation = await this.datesService.findReservationByDateAndPhone(
+        nextState.currentDate,
+        nextState.phone,
+        nextState.currentTime,
+      );
+
+      if (resolvedReservation === undefined && nextState.currentName && nextState.currentTime) {
+        const currentReservationIndex = await this.datesService.getReservationIndexByData(
+          nextState.currentDate,
+          nextState.currentTime,
+          nextState.currentName,
+          nextState.phone,
+        );
+
+        if (currentReservationIndex === -1) {
+          const message = 'No se encontro la reserva con los datos proporcionados.';
+          await this.cacheService.appendEntityMessage(
+            waId,
+            message,
+            RoleEnum.ASSISTANT,
+            Intention.UPDATE,
+          );
+          return { reply: message };
+        }
+
+        nextState = await this.cacheService.updateUpdateState(waId, {
+          stage: 'reschedule',
+        });
+      } else if (resolvedReservation === 'ambiguous') {
+        const response = await this.aiService.askUpdateReservationData(
+          ['currentTime'],
+          history,
+          nextState,
+        );
+        await this.cacheService.appendEntityMessage(
+          waId,
+          response,
+          RoleEnum.ASSISTANT,
+          Intention.UPDATE,
+        );
+        return { reply: response };
+      } else if (resolvedReservation === null) {
+        const message = 'No se encontro la reserva con los datos proporcionados.';
+        await this.cacheService.appendEntityMessage(
+          waId,
+          message,
+          RoleEnum.ASSISTANT,
+          Intention.UPDATE,
+        );
+        return { reply: message };
+      } else {
+        nextState = await this.cacheService.updateUpdateState(waId, {
+          currentName: resolvedReservation.name,
+          currentTime: resolvedReservation.time,
+          currentQuantity: String(resolvedReservation.quantity),
+          stage: 'reschedule',
+        });
+      }
+    }
+
     if (
+      nextState.stage === 'reschedule' &&
       nextState.currentName &&
       nextState.phone &&
       nextState.currentDate &&
@@ -141,7 +191,7 @@ export class UpdateReservationStrategy implements IntentionStrategyInterface {
       );
 
       if (currentReservationIndex === -1) {
-        const message = 'No se encontró la reserva con los datos proporcionados.';
+        const message = 'No se encontro la reserva con los datos proporcionados.';
         await this.cacheService.appendEntityMessage(
           waId,
           message,
@@ -152,8 +202,13 @@ export class UpdateReservationStrategy implements IntentionStrategyInterface {
       }
     }
 
-    if (target.length > 0) {
-      const response = await this.aiService.askUpdateReservationData(target, history, nextState);
+    const nextMissingFields = getMissingUpdateFields(nextState);
+    if (nextMissingFields.target.length > 0) {
+      const response = await this.aiService.askUpdateReservationData(
+        nextMissingFields.target,
+        history,
+        nextState,
+      );
       await this.cacheService.appendEntityMessage(
         waId,
         response,
@@ -211,7 +266,7 @@ export class UpdateReservationStrategy implements IntentionStrategyInterface {
       this.logger.error('Error al actualizar la reserva', error as Error);
       return {
         reply:
-          'No pudimos actualizar la reserva en este momento. Por favor intentá de nuevo más tarde.',
+          'No pudimos actualizar la reserva en este momento. Por favor intenta de nuevo mas tarde.',
       };
     }
   }

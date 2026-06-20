@@ -36,11 +36,9 @@ function hasConcreteCalendarDate(value: string | null): boolean {
 export function getMissingUpdateFields(state: UpdateReservationType): UpdateMissingFields {
   const current: UpdateField[] = [];
 
-  if (!state.currentName) current.push('currentName');
   if (!state.phone) current.push('phone');
   if (!state.currentDate || !hasConcreteCalendarDate(state.currentDate))
     current.push('currentDate');
-  if (!state.currentTime) current.push('currentTime');
 
   const target: UpdateField[] = [];
   const hasCurrentReservationData = current.length === 0;
