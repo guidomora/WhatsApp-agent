@@ -30,8 +30,8 @@ Modificar una reserva existente desde WhatsApp, localizando primero la reserva o
 2. Se agrupan mensajes en rafaga del usuario.
 3. `ReservationsService` recupera contexto conversacional.
 4. `AiService` clasifica o mantiene la intencion de modificacion.
-5. `UpdateReservationStrategy` intenta identificar la reserva original.
-6. Si faltan datos para localizarla, el bot los solicita.
+5. `UpdateReservationStrategy` intenta identificar la reserva original por telefono y fecha.
+6. Si telefono y fecha no alcanzan para identificar una unica reserva, el bot solicita la hora para desambiguar.
 7. Una vez localizada, la estrategia extrae los cambios pedidos.
 8. Se validan fecha, hora, cantidad y disponibilidad nueva.
 9. `UpdateReservationUseCase` actualiza la reserva.
@@ -42,7 +42,7 @@ Modificar una reserva existente desde WhatsApp, localizando primero la reserva o
 ## Datos leidos
 
 - Contexto conversacional activo.
-- Datos de la reserva original.
+- Datos de la reserva original, resueltos desde telefono y fecha cuando identifican una unica reserva.
 - Reservas confirmadas.
 - Disponibilidad del nuevo horario.
 - Cierres de dia o franja.
@@ -58,6 +58,7 @@ Modificar una reserva existente desde WhatsApp, localizando primero la reserva o
 ## Validaciones
 
 - La reserva original debe existir.
+- El nombre original no debe bloquear la modificacion si telefono y fecha identifican una unica reserva.
 - La reserva original no debe estar en el pasado.
 - La nueva fecha y hora no deben estar en el pasado.
 - La nueva cantidad debe respetar limite de grupo.
@@ -67,7 +68,8 @@ Modificar una reserva existente desde WhatsApp, localizando primero la reserva o
 
 ## Errores y contingencias
 
-- Si faltan datos para ubicar la reserva, se piden.
+- Si faltan telefono o fecha para ubicar la reserva, se piden.
+- Si hay mas de una reserva para el mismo telefono y fecha, se pide la hora.
 - Si la reserva original no existe, se informa que no pudo encontrarse.
 - Si la reserva original ya paso, no se modifica.
 - Si el nuevo horario no tiene disponibilidad, no se altera la reserva original.

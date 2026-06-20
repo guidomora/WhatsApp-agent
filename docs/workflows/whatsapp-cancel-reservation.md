@@ -30,8 +30,8 @@ Cancelar una reserva existente desde WhatsApp, recolectando datos suficientes pa
 2. Se agrupan mensajes en rafaga del usuario.
 3. `ReservationsService` recupera contexto conversacional.
 4. `AiService` clasifica o mantiene la intencion de cancelacion.
-5. `DeleteReservationStrategy` extrae datos para ubicar la reserva.
-6. Si faltan datos, el bot pide solo lo necesario.
+5. `DeleteReservationStrategy` extrae telefono y fecha para ubicar la reserva.
+6. Si telefono y fecha no alcanzan para identificar una unica reserva, el bot pide la hora.
 7. Se busca la reserva confirmada.
 8. Si existe y no hay ambiguedad, se elimina o limpia la fila correspondiente.
 9. Se recalcula disponibilidad.
@@ -43,6 +43,7 @@ Cancelar una reserva existente desde WhatsApp, recolectando datos suficientes pa
 - Contexto conversacional.
 - Telefono del usuario.
 - Fecha y hora indicadas.
+- Nombre guardado de la reserva encontrada, si existe.
 - Reservas confirmadas.
 - Disponibilidad asociada al dia.
 
@@ -57,13 +58,15 @@ Cancelar una reserva existente desde WhatsApp, recolectando datos suficientes pa
 
 - Deben existir datos suficientes para localizar la reserva.
 - No debe cancelarse una reserva ambigua.
+- El nombre no debe bloquear la cancelacion si telefono y fecha identifican una unica reserva.
 - La reserva debe existir.
 - La disponibilidad debe actualizarse luego de la baja.
 - Un webhook duplicado no debe ejecutar dos cancelaciones inconsistentes.
 
 ## Errores y contingencias
 
-- Si faltan datos, se piden.
+- Si faltan telefono o fecha, se piden.
+- Si hay mas de una reserva para el mismo telefono y fecha, se pide la hora.
 - Si no se encuentra la reserva, se informa sin modificar datos.
 - Si los datos no coinciden con ninguna reserva, no se cancela.
 - Si falla Google Sheets, no se informa cancelacion exitosa.

@@ -20,3 +20,4 @@ export * from './dashboard-open-day.type';
 export * from './dashboard-open-slot.type';
 export * from './affected-reservation-state.type';
 export * from './closure-notification-failure.type';
+export * from './reservation-lookup-result.type';

@@ -14,6 +14,7 @@ import {
   TemporalStatusEnum,
   UpdateReservationOptions,
   UpdateReservationType,
+  ReservationLookupResult,
 } from 'src/lib';
 import {
   CreateDayUseCase,
@@ -363,6 +364,38 @@ export class DatesService {
       currentTime,
       formattedPhone,
     );
+  }
+
+  async findReservationByDateAndPhone(
+    currentDate: string,
+    phone: string,
+    currentTime?: string | null,
+  ): Promise<ReservationLookupResult> {
+    const formattedPhone = formatPhoneNumber(phone) ?? phone;
+
+    if (currentTime) {
+      return this.datesSheetPort.getReservationByDateTimeAndPhone(
+        currentDate,
+        currentTime,
+        formattedPhone,
+      );
+    }
+
+    const reservations = await this.datesSheetPort.getReservationsByDate(currentDate);
+    const matchingReservations = reservations.filter((reservation) => {
+      const normalizedReservationPhone = formatPhoneNumber(reservation.phone) ?? reservation.phone;
+      return normalizedReservationPhone === formattedPhone;
+    });
+
+    if (matchingReservations.length === 0) {
+      return null;
+    }
+
+    if (matchingReservations.length > 1) {
+      return 'ambiguous';
+    }
+
+    return matchingReservations[0];
   }
 
   async createReservation(

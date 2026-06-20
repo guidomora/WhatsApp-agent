@@ -77,6 +77,7 @@ export const createDatesServiceMock = () =>
     deleteTemporalReservationRow: jest.fn<Promise<void>, [number]>(),
     deleteReservation: jest.fn<Promise<string>, [DeleteReservation]>(),
     getReservationIndexByData: jest.fn<Promise<number>, [string, string, string, string]>(),
+    findReservationByDateAndPhone: jest.fn(),
     findReservationByLookup: jest.fn<
       Promise<DashboardReservation | null>,
       [string, string, string]

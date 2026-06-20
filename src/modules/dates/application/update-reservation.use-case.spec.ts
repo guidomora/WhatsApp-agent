@@ -79,6 +79,7 @@ describe('UpdateReservationUseCase', () => {
 
   it('should return no date found when current reservation does not exist', async () => {
     googleSheetsServiceMock.isDayClosed.mockResolvedValue(false);
+    googleSheetsServiceMock.getReservationByDateTimeAndPhone.mockResolvedValue(null);
     googleSheetsServiceMock.getDateIndexByData.mockResolvedValue(-1);
 
     const result = await useCase.updateReservation(buildUpdateReservationMock());
@@ -86,6 +87,45 @@ describe('UpdateReservationUseCase', () => {
     expect(result.status).toBe(StatusEnum.NO_DATE_FOUND);
     expect(result.error).toBe(true);
     expect(result.message).toContain('reserva con los datos proporcionados');
+  });
+
+  it('should update using stored current name when provided current name has a typo', async () => {
+    googleSheetsServiceMock.isDayClosed.mockResolvedValue(false);
+    googleSheetsServiceMock.getReservationByDateTimeAndPhone.mockResolvedValue({
+      date: futureReservationDateLabelMock,
+      time: '20:00',
+      name: 'guido morbito',
+      phone: '54-9-1154916243',
+      service: 'cena',
+      quantity: 4,
+    });
+    googleSheetsServiceMock.getDateIndexByData.mockResolvedValue(27);
+    googleSheetsServiceMock.hasReservationByDateAndPhone.mockResolvedValue(false);
+    googleSheetsServiceMock.getRowValues.mockResolvedValue(updateCurrentRowValuesMock);
+    googleSheetsServiceMock.getAvailabilityFromReservations.mockResolvedValue({
+      isAvailable: true,
+      reservations: 10,
+      available: 32,
+    });
+
+    await expect(
+      useCase.updateReservation(
+        buildUpdateReservationMock({
+          currentName: 'guido morabito',
+          newName: 'Guido Morabito',
+        }),
+      ),
+    ).resolves.toMatchObject({
+      status: StatusEnum.SUCCESS,
+      error: false,
+    });
+
+    expect(googleSheetsServiceMock.getDateIndexByData).toHaveBeenCalledWith({
+      date: futureReservationDateLabelMock,
+      time: '20:00',
+      name: 'guido morbito',
+      phone: '54-9-1154916243',
+    });
   });
 
   it('should return duplicate same day response when phone already has another booking that day', async () => {

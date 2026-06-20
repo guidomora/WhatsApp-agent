@@ -10,6 +10,10 @@ import {
 } from '../../test/mocks/dependency-mocks';
 import { UpdateReservationStrategy } from './update-reservation.strategy';
 
+type DatesServiceFlexibleLookupMock = ReturnType<typeof createDatesServiceMock> & {
+  findReservationByDateAndPhone: jest.Mock;
+};
+
 describe('UpdateReservationStrategy', () => {
   let strategy: UpdateReservationStrategy;
   let datesServiceMock = createDatesServiceMock();
@@ -34,15 +38,11 @@ describe('UpdateReservationStrategy', () => {
   it('should ask only for phone when that is the last missing current field', async () => {
     cacheServiceMock.getUpdateState.mockResolvedValue({
       ...updateStateIdentifyMock,
-      currentName: 'guido',
       currentDate: 'domingo 29 de marzo 2026 29/03/2026',
-      currentTime: '21:00',
     });
     cacheServiceMock.updateUpdateState.mockResolvedValue({
       ...updateStateIdentifyMock,
-      currentName: 'guido',
       currentDate: 'domingo 29 de marzo 2026 29/03/2026',
-      currentTime: '21:00',
       phone: null,
     });
     cacheServiceMock.getHistory.mockResolvedValue([]);
@@ -58,12 +58,113 @@ describe('UpdateReservationStrategy', () => {
       [],
       {
         ...updateStateIdentifyMock,
-        currentName: 'guido',
         currentDate: 'domingo 29 de marzo 2026 29/03/2026',
-        currentTime: '21:00',
         phone: null,
       },
     ]);
+  });
+
+  it('should resolve current reservation by phone and date without requiring current name', async () => {
+    const identifiedState = {
+      ...updateStateIdentifyMock,
+      phone: '5491112345678',
+      currentDate: 'domingo 29 de marzo 2026 29/03/2026',
+      newTime: '19:00',
+    };
+    const resolvedReservation = {
+      date: identifiedState.currentDate,
+      time: '21:00',
+      name: 'guido morbito',
+      phone: identifiedState.phone,
+      service: 'cena',
+      quantity: 2,
+    };
+    const resolvedUpdateState = {
+      ...identifiedState,
+      currentName: resolvedReservation.name,
+      currentTime: resolvedReservation.time,
+      currentQuantity: String(resolvedReservation.quantity),
+      stage: 'reschedule' as const,
+    };
+
+    cacheServiceMock.getUpdateState.mockResolvedValue(updateStateIdentifyMock);
+    cacheServiceMock.updateUpdateState
+      .mockResolvedValueOnce(identifiedState)
+      .mockResolvedValueOnce(resolvedUpdateState);
+    cacheServiceMock.getHistory.mockResolvedValue([]);
+    (
+      datesServiceMock as DatesServiceFlexibleLookupMock
+    ).findReservationByDateAndPhone.mockResolvedValue(resolvedReservation);
+    updateReservationQueueServiceMock.updateReservation.mockResolvedValue({
+      status: StatusEnum.SUCCESS,
+      message: 'Reserva actualizada',
+      error: false,
+    });
+
+    await expect(
+      strategy.execute(
+        {
+          intent: Intention.UPDATE,
+          currentDate: identifiedState.currentDate,
+          useCurrentPhone: true,
+          newTime: '19:00',
+        },
+        simplifiedPayloadMock,
+      ),
+    ).resolves.toEqual({
+      reply: 'Reserva actualizada',
+    });
+
+    expect(cacheServiceMock.updateUpdateState.mock.calls[1]).toEqual([
+      simplifiedPayloadMock.waId,
+      {
+        currentName: resolvedReservation.name,
+        currentTime: resolvedReservation.time,
+        currentQuantity: String(resolvedReservation.quantity),
+        stage: 'reschedule',
+      },
+    ]);
+    expect(updateReservationQueueServiceMock.updateReservation.mock.calls[0]).toEqual([
+      resolvedUpdateState,
+    ]);
+  });
+
+  it('should ask for current time when phone and date lookup is ambiguous', async () => {
+    const identifiedState = {
+      ...updateStateIdentifyMock,
+      phone: '5491112345678',
+      currentDate: 'domingo 29 de marzo 2026 29/03/2026',
+      newTime: '19:00',
+    };
+
+    cacheServiceMock.getUpdateState.mockResolvedValue(updateStateIdentifyMock);
+    cacheServiceMock.updateUpdateState.mockResolvedValue(identifiedState);
+    cacheServiceMock.getHistory.mockResolvedValue([]);
+    (
+      datesServiceMock as DatesServiceFlexibleLookupMock
+    ).findReservationByDateAndPhone.mockResolvedValue('ambiguous');
+    aiServiceMock.askUpdateReservationData.mockResolvedValue('Decime el horario actual');
+
+    await expect(
+      strategy.execute(
+        {
+          intent: Intention.UPDATE,
+          currentDate: identifiedState.currentDate,
+          useCurrentPhone: true,
+          newTime: '19:00',
+        },
+        simplifiedPayloadMock,
+      ),
+    ).resolves.toEqual({
+      reply: 'Decime el horario actual',
+    });
+
+    expect(aiServiceMock.askUpdateReservationData.mock.calls[0]).toEqual([
+      ['currentTime'],
+      [],
+      identifiedState,
+    ]);
+    expect(updateReservationQueueServiceMock.updateReservation.mock.calls).toHaveLength(0);
   });
 
   it('should use the current WhatsApp number when AI marks useCurrentPhone', async () => {

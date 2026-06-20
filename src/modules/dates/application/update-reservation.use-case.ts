@@ -100,9 +100,9 @@ export class UpdateReservationUseCase {
   private validateRequiredOriginalData(
     updateReservation: UpdateReservationType,
   ): ServiceResponse | null {
-    const { currentDate, currentTime, currentName, phone } = updateReservation;
+    const { currentDate, currentTime, phone } = updateReservation;
 
-    if (!currentDate || !currentTime || !currentName || !phone) {
+    if (!currentDate || !currentTime || !phone) {
       return {
         status: StatusEnum.MISSING_DATA_UPDATE,
         message: 'Faltan datos de la reserva original',
@@ -122,12 +122,12 @@ export class UpdateReservationUseCase {
     const formattedPhone = formatPhoneNumber(phone) ?? phone!;
     const targetDate = newDate ?? currentDate!;
     const targetTime = newTime ?? currentTime!;
-    const targetName = newName ?? currentName!;
+    const targetName = newName ?? currentName ?? '';
 
     return {
       currentDate: currentDate!,
       currentTime: currentTime!,
-      currentName: currentName!,
+      currentName: currentName ?? '',
       phone: phone!,
       newQuantity,
       formattedPhone,
@@ -177,6 +177,23 @@ export class UpdateReservationUseCase {
   private async findCurrentReservationIndex(
     context: UpdateReservationContextType,
   ): Promise<number> {
+    const storedReservation = await this.datesSheetPort.getReservationByDateTimeAndPhone(
+      context.currentDate,
+      context.currentTime,
+      context.formattedPhone,
+    );
+
+    if (storedReservation) {
+      context.currentName = storedReservation.name;
+      if (!context.targetName) {
+        context.targetName = storedReservation.name;
+      }
+    }
+
+    if (!context.currentName) {
+      return -1;
+    }
+
     const searchIndexObject: GetIndexParams = {
       date: context.currentDate,
       time: context.currentTime,
