@@ -57,6 +57,28 @@ describe('DeleteReservationStrategy', () => {
     ]);
   });
 
+  it('should use the current WhatsApp number when AI marks useCurrentPhone', async () => {
+    cacheServiceMock.updateCancelState.mockResolvedValue(cancelStateMock);
+    deleteReservationQueueServiceMock.deleteReservation.mockResolvedValue('Reserva cancelada');
+    cacheServiceMock.getHistory.mockResolvedValue([]);
+    aiServiceMock.cancelReservationResult.mockResolvedValue('Listo, la cancelamos');
+
+    await strategy.execute(
+      { intent: Intention.CANCEL, useCurrentPhone: true },
+      simplifiedPayloadMock,
+    );
+
+    expect(cacheServiceMock.updateCancelState.mock.calls[0]).toEqual([
+      simplifiedPayloadMock.waId,
+      {
+        phone: simplifiedPayloadMock.waId,
+        date: null,
+        time: null,
+        name: null,
+      },
+    ]);
+  });
+
   it('should delete reservation, clear cancel cache and mark flow completed', async () => {
     cacheServiceMock.updateCancelState.mockResolvedValue(cancelStateMock);
     deleteReservationQueueServiceMock.deleteReservation.mockResolvedValue('Reserva cancelada');

@@ -46,7 +46,7 @@ ${JSON.stringify(missingFields)}
 [Reglas del mensaje]
 - El mensaje debe ser **una sola línea** de texto, sin prefijos ni explicaciones (no agregues “Asistente:” ni nada parecido).
 - Sé específico con el campo faltante:
-  - Falta "phone": "¿Me pasás un teléfono de contacto para ubicar la reserva? (solo números)"
+  - Falta "phone": "¿Querés usar este número de WhatsApp para ubicar la reserva o preferís pasar otro? Si es otro, mandamelo con solo números."
   - Falta "date": "¿Para qué día está la reserva que querés cancelar?"
   - Falta "time": "¿A qué hora está la reserva que querés cancelar?"
   - Falta "name": "¿A nombre de quién figura la reserva que querés cancelar?"

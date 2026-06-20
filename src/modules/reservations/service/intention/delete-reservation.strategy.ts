@@ -29,8 +29,11 @@ export class DeleteReservationStrategy implements IntentionStrategyInterface {
     simplifiedPayload: SimplifiedTwilioWebhookPayload,
   ): Promise<StrategyResult> {
     const waId = simplifiedPayload.waId;
+    const resolvedPhone =
+      aiResponse.phone ?? (aiResponse.useCurrentPhone ? simplifiedPayload.waId : null);
+
     const state = await this.cacheService.updateCancelState(waId, {
-      phone: aiResponse.phone ?? null,
+      phone: resolvedPhone,
       date: aiResponse.date ?? null,
       time: aiResponse.time ?? null,
       name: aiResponse.name ?? null,
