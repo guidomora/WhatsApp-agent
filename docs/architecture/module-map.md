@@ -24,6 +24,7 @@ Modulos importados:
 - `ReservationJobsModule`
 - `DatabaseModule`
 - `BillingUsageModule`
+- `ReservationContextModule`
 - `HealthModule`
 
 ## WhatsAppModule
@@ -153,6 +154,28 @@ Archivos clave:
 - `src/modules/billing-usage/service/billing-period.service.ts`
 - `src/modules/billing-usage/entities/*`
 - `src/lib/types/billing-usage/*`
+
+## ReservationContextModule
+
+Archivo principal: `src/modules/reservation-context/reservation-context.module.ts`
+
+Responsabilidad:
+
+- Persistir el snapshot estructurado de la ultima reserva accionable por usuario de WhatsApp.
+- Mantener como maximo un contexto por `waId`.
+- Exponer operaciones internas para guardar, recuperar, cancelar o expirar contextos.
+- Preparar la continuidad conversacional despues de expirar la cache, sin conectar todavia con los flujos vivos.
+
+Dependencias:
+
+- PostgreSQL via TypeORM.
+
+Archivos clave:
+
+- `src/modules/reservation-context/reservation-context.module.ts`
+- `src/modules/reservation-context/entities/reservation-context.entity.ts`
+- `src/modules/reservation-context/domain/repository/reservation-context.repository.ts`
+- `src/lib/types/reservation-context/*`
 
 ## AiModule
 

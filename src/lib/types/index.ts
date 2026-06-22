@@ -22,6 +22,7 @@ export * from './rate-limit';
 export * from './errors';
 export * from './dates';
 export * from './billing-usage';
+export * from './reservation-context';
 
 export * from './config';
 export * from './health';

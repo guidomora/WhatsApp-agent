@@ -2,7 +2,7 @@
 
 ### 02/06/25
 
-- Endpoint to show the current usage of the plan 
+- Endpoint to show the current usage of the plan
 - guards moved to common folder to be used by other modules
 - TODO:
 - IP-based rate limiting on public endpoints (global + stricter on /webhook). ----> add once is deployed

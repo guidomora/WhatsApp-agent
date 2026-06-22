@@ -7,7 +7,7 @@ Este documento resume donde vive la informacion del sistema y que reglas de cons
 El sistema combina estado persistente, estado temporal y estado de ejecucion:
 
 - Google Sheets: fuente operativa para reservas, disponibilidad, agenda y datos temporales.
-- PostgreSQL: fuente de plataforma para cuenta, plan, suscripcion y consumo mensual.
+- PostgreSQL: fuente de plataforma para cuenta, plan, suscripcion, consumo mensual y contexto persistente auxiliar de ultima reserva WhatsApp.
 - Cache conversacional: historial y estado de flujos por usuario.
 - Redis/jobs: colas y estado operacional para trabajos asincronicos.
 - Variables de entorno: configuracion de integraciones, seguridad, limites y reglas operativas.
@@ -59,7 +59,7 @@ Codigo relacionado:
 
 ## PostgreSQL
 
-PostgreSQL persiste datos de plataforma que no pertenecen a la agenda operativa en Google Sheets.
+PostgreSQL persiste datos de plataforma que no pertenecen a la agenda operativa en Google Sheets y contexto auxiliar para continuidad conversacional.
 
 Responsabilidades:
 
@@ -67,6 +67,7 @@ Responsabilidades:
 - Registrar eventos de uso de reservas creadas desde WhatsApp.
 - Mantener el agregado mensual usado para validar limites.
 - Sostener el limite hard de nuevas reservas WhatsApp.
+- Persistir un snapshot estructurado de la ultima reserva accionable por usuario de WhatsApp.
 
 Tablas principales:
 
@@ -75,6 +76,7 @@ Tablas principales:
 - `subscriptions`
 - `usage_events`
 - `monthly_usage`
+- `reservation_contexts`
 
 Reglas:
 
@@ -85,6 +87,7 @@ Reglas:
 - Si la cola falla antes de encolar o la creacion responde con error, se libera el cupo reservado.
 - Si el job ya fue encolado y falla la espera del resultado, el cupo queda reservado para evitar subcontabilizar una reserva con resultado desconocido.
 - La migracion inicial crea `account` default, plan `mvp_default` y suscripcion activa de MVP.
+- `reservation_contexts` mantiene como maximo un contexto por `waId` y no guarda el transcript completo de WhatsApp.
 
 Codigo relacionado:
 
@@ -93,6 +96,8 @@ Codigo relacionado:
 - `src/modules/billing-usage/billing-usage.module.ts`
 - `src/modules/billing-usage/service/usage-limit.service.ts`
 - `src/modules/billing-usage/entities/*`
+- `src/modules/reservation-context/entities/*`
+- `src/modules/reservation-context/domain/repository/reservation-context.repository.ts`
 - `src/database/migrations/*`
 
 Referencia detallada:

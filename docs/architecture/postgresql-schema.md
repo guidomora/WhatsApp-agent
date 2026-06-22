@@ -3,19 +3,22 @@
 Este documento describe el esquema PostgreSQL actual del proyecto. La fuente de verdad tecnica son las entidades TypeORM y las migraciones, especialmente:
 
 - `src/modules/billing-usage/entities/*`
+- `src/modules/reservation-context/entities/*`
 - `src/database/migrations/20260518000000-CreateBillingUsageTables.ts`
+- `src/database/migrations/20260622000000-CreateReservationContextsTable.ts`
 
 ## Alcance
 
-PostgreSQL guarda datos de plataforma para billing/usage:
+PostgreSQL guarda datos de plataforma para billing/usage y contexto operativo auxiliar:
 
 - Cuenta/restaurante del sistema.
 - Plan comercial aplicado.
 - Suscripcion vigente o historica.
 - Eventos de consumo de reservas creadas desde WhatsApp.
 - Agregado mensual usado para validar limites.
+- Snapshot de ultima reserva accionable por usuario de WhatsApp.
 
-No guarda reservas operativas, disponibilidad ni agenda.
+No guarda reservas operativas, disponibilidad ni agenda. Las reservas confirmadas siguen viviendo en Google Sheets.
 
 ## Relaciones
 
@@ -23,6 +26,7 @@ No guarda reservas operativas, disponibilidad ni agenda.
 - `plans` 1:N `subscriptions`
 - `accounts` 1:N `usage_events`
 - `accounts` 1:N `monthly_usage`
+- `reservation_contexts` no tiene foreign keys en esta fase; usa `waId` como clave unica de contexto conversacional.
 
 Reglas de borrado definidas por la migracion:
 
@@ -179,6 +183,43 @@ Codigo relacionado:
 - `src/modules/billing-usage/entities/monthly-usage.entity.ts`
 - `src/modules/billing-usage/domain/repository/billing-usage.repository.ts`
 
+### `reservation_contexts`
+
+Snapshot persistente de la ultima reserva accionable asociada a un usuario de WhatsApp. No guarda el historial completo de conversacion.
+
+| Columna                   | Tipo           | Nullable | Default             | Descripcion                                                   |
+| ------------------------- | -------------- | -------- | ------------------- | ------------------------------------------------------------- |
+| `id`                      | `uuid`         | No       | `gen_random_uuid()` | Identificador interno del contexto.                           |
+| `waId`                    | `varchar`      | No       | -                   | Identificador del usuario/conversacion de WhatsApp.           |
+| `phone`                   | `varchar`      | No       | -                   | Telefono normalizado usado para ubicar reservas operativas.   |
+| `reservationDate`         | `varchar`      | No       | -                   | Fecha de reserva en formato de negocio/agenda.                |
+| `reservationTime`         | `varchar`      | No       | -                   | Hora de reserva en formato de negocio/agenda.                 |
+| `reservationStartsAt`     | `timestamptz`  | No       | -                   | Inicio absoluto de la reserva.                                |
+| `reservationEndsAt`       | `timestamptz`  | No       | -                   | Fin absoluto de la reserva.                                   |
+| `name`                    | `varchar(255)` | No       | -                   | Nombre asociado a la reserva.                                 |
+| `quantity`                | `integer`      | No       | -                   | Cantidad de personas.                                         |
+| `status`                  | `enum`         | No       | -                   | Estado del contexto: `active`, `cancelled` o `expired`.       |
+| `lastConversationSummary` | `text`         | Si       | `null`              | Resumen corto opcional; no debe contener transcript completo. |
+| `createdAt`               | `timestamptz`  | No       | `now()`             | Fecha de creacion del registro.                               |
+| `updatedAt`               | `timestamptz`  | No       | `now()`             | Fecha de ultima actualizacion del registro.                   |
+
+Indices:
+
+- `IDX_reservation_contexts_wa_id_unique`: unique sobre `waId`.
+- `IDX_reservation_contexts_status_ends_at`: indice sobre `status` + `reservationEndsAt`.
+
+Reglas de uso:
+
+- Debe existir como maximo una fila por `waId`.
+- Un nuevo snapshot para el mismo `waId` reemplaza el contexto anterior y queda con `status = active`.
+- La busqueda de contexto activo solo devuelve filas `active` con `reservationEndsAt` futuro.
+- `cancelled` y `expired` no deben hidratar flujos futuros.
+
+Codigo relacionado:
+
+- `src/modules/reservation-context/entities/reservation-context.entity.ts`
+- `src/modules/reservation-context/domain/repository/reservation-context.repository.ts`
+
 ## Datos iniciales
 
 La migracion inicial crea datos minimos para que una base nueva pueda operar en el MVP:
@@ -202,5 +243,6 @@ La migracion inicial crea datos minimos para que una base nueva pueda operar en 
 
 - Los periodos mensuales usan formato `YYYY-MM`.
 - Las fechas de vigencia y eventos se guardan como `timestamptz`.
+- Los contextos de reserva guardan fecha/hora de negocio como `varchar` y limites temporales como `timestamptz`.
 - Las migraciones usan `pgcrypto` para `gen_random_uuid()`.
 - TypeORM esta configurado con `synchronize: false`; los cambios de esquema deben entrar por migraciones.
