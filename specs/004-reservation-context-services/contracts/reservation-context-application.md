@@ -8,17 +8,17 @@ Saves the latest actionable reservation context for a WhatsApp user.
 
 ### Input
 
-| Field | Required | Description |
-| ----- | -------- | ----------- |
-| `waId` | yes | WhatsApp user identifier |
-| `phone` | yes | Operational phone used to locate reservations |
-| `reservationDate` | yes | Business-facing reservation date |
-| `reservationTime` | yes | Business-facing reservation time |
-| `reservationStartsAt` | yes | Absolute reservation start moment |
-| `reservationEndsAt` | yes | Absolute reservation end moment |
-| `name` | yes | Customer name |
-| `quantity` | yes | Party size |
-| `lastConversationSummary` | no | Optional short summary, never a full transcript |
+| Field                     | Required | Description                                     |
+| ------------------------- | -------- | ----------------------------------------------- |
+| `waId`                    | yes      | WhatsApp user identifier                        |
+| `phone`                   | yes      | Operational phone used to locate reservations   |
+| `reservationDate`         | yes      | Business-facing reservation date                |
+| `reservationTime`         | yes      | Business-facing reservation time                |
+| `reservationStartsAt`     | yes      | Absolute reservation start moment               |
+| `reservationEndsAt`       | yes      | Absolute reservation end moment                 |
+| `name`                    | yes      | Customer name                                   |
+| `quantity`                | yes      | Party size                                      |
+| `lastConversationSummary` | no       | Optional short summary, never a full transcript |
 
 ### Behavior
 
@@ -39,10 +39,10 @@ Retrieves actionable context for a WhatsApp user.
 
 ### Input
 
-| Field | Required | Description |
-| ----- | -------- | ----------- |
-| `waId` | yes | WhatsApp user identifier |
-| `now` | yes | Comparison moment for active/ended checks |
+| Field  | Required | Description                               |
+| ------ | -------- | ----------------------------------------- |
+| `waId` | yes      | WhatsApp user identifier                  |
+| `now`  | yes      | Comparison moment for active/ended checks |
 
 ### Behavior
 
@@ -61,9 +61,9 @@ Marks one user's context as cancelled.
 
 ### Input
 
-| Field | Required | Description |
-| ----- | -------- | ----------- |
-| `waId` | yes | WhatsApp user identifier |
+| Field  | Required | Description              |
+| ------ | -------- | ------------------------ |
+| `waId` | yes      | WhatsApp user identifier |
 
 ### Behavior
 
@@ -81,9 +81,9 @@ Marks active contexts as expired when their reservation ended before a cutoff.
 
 ### Input
 
-| Field | Required | Description |
-| ----- | -------- | ----------- |
-| `cutoffDate` | yes | Expiration cutoff |
+| Field        | Required | Description       |
+| ------------ | -------- | ----------------- |
+| `cutoffDate` | yes      | Expiration cutoff |
 
 ### Behavior
 

@@ -18,8 +18,8 @@
 
 **Purpose**: Create the module structure needed by all application-layer work.
 
-- [ ] T001 Create `application/` and `service/` directories under `src/modules/reservation-context/`
-- [ ] T002 Confirm `specs/004-reservation-context-services/quickstart.md` acceptance checks match the current plan before implementation
+- [x] T001 Create `application/` and `service/` directories under `src/modules/reservation-context/`
+- [x] T002 Confirm `specs/004-reservation-context-services/quickstart.md` acceptance checks match the current plan before implementation
 
 ---
 
@@ -29,13 +29,13 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T003 [P] Add `ReservationContextErrorCode` enum in `src/lib/types/reservation-context/reservation-context-error-code.enum.ts`
-- [ ] T004 [P] Add operation result types in `src/lib/types/reservation-context/reservation-context-operation-result.type.ts`
-- [ ] T005 [P] Add active lookup result types in `src/lib/types/reservation-context/get-active-reservation-context-result.type.ts`
-- [ ] T006 [P] Add save input type alias in `src/lib/types/reservation-context/save-reservation-context-input.type.ts`
-- [ ] T007 Update exports for all new reservation-context types in `src/lib/types/reservation-context/index.ts`
-- [ ] T008 [P] Add reusable reservation-context fixtures in `src/modules/reservation-context/test/mocks/reservation-context-fixtures.ts`
-- [ ] T009 Extend repository mocks for use-case tests in `src/modules/reservation-context/test/mocks/dependency-mocks.ts`
+- [x] T003 [P] Add `ReservationContextErrorCode` enum in `src/lib/types/reservation-context/reservation-context-error-code.enum.ts`
+- [x] T004 [P] Add operation result types in `src/lib/types/reservation-context/reservation-context-operation-result.type.ts`
+- [x] T005 [P] Add active lookup result types in `src/lib/types/reservation-context/get-active-reservation-context-result.type.ts`
+- [x] T006 [P] Add save input type alias in `src/lib/types/reservation-context/save-reservation-context-input.type.ts`
+- [x] T007 Update exports for all new reservation-context types in `src/lib/types/reservation-context/index.ts`
+- [x] T008 [P] Add reusable reservation-context fixtures in `src/modules/reservation-context/test/mocks/reservation-context-fixtures.ts`
+- [x] T009 Extend repository mocks for use-case tests in `src/modules/reservation-context/test/mocks/dependency-mocks.ts`
 
 **Checkpoint**: Shared contracts and reusable test data are ready.
 
@@ -49,16 +49,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Add normalizer unit tests in `src/modules/reservation-context/service/reservation-context-normalizer.service.spec.ts`
-- [ ] T011 [P] [US1] Add validation unit tests for required fields, quantity, and time windows in `src/modules/reservation-context/service/reservation-context-validation.service.spec.ts`
-- [ ] T012 [P] [US1] Add save use-case unit tests for valid save, replacement behavior, validation failure, and persistence failure in `src/modules/reservation-context/application/save-reservation-context.use-case.spec.ts`
+- [x] T010 [P] [US1] Add normalizer unit tests in `src/modules/reservation-context/service/reservation-context-normalizer.service.spec.ts`
+- [x] T011 [P] [US1] Add validation unit tests for required fields, quantity, and time windows in `src/modules/reservation-context/service/reservation-context-validation.service.spec.ts`
+- [x] T012 [P] [US1] Add save use-case unit tests for valid save, replacement behavior, validation failure, and persistence failure in `src/modules/reservation-context/application/save-reservation-context.use-case.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement text trimming and identifier normalization in `src/modules/reservation-context/service/reservation-context-normalizer.service.ts`
-- [ ] T014 [US1] Implement save input validation with stable error codes in `src/modules/reservation-context/service/reservation-context-validation.service.ts`
-- [ ] T015 [US1] Implement save orchestration in `src/modules/reservation-context/application/save-reservation-context.use-case.ts`
-- [ ] T016 [US1] Register and export save use-case plus validation/normalizer services in `src/modules/reservation-context/reservation-context.module.ts`
+- [x] T013 [US1] Implement text trimming and identifier normalization in `src/modules/reservation-context/service/reservation-context-normalizer.service.ts`
+- [x] T014 [US1] Implement save input validation with stable error codes in `src/modules/reservation-context/service/reservation-context-validation.service.ts`
+- [x] T015 [US1] Implement save orchestration in `src/modules/reservation-context/application/save-reservation-context.use-case.ts`
+- [x] T016 [US1] Register and export save use-case plus validation/normalizer services in `src/modules/reservation-context/reservation-context.module.ts`
 
 **Checkpoint**: User Story 1 is functional and testable with `npm run test:reservation-context`.
 
@@ -72,12 +72,12 @@
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Add active lookup use-case tests for found context, missing context, normalized `waId`, and repository failure in `src/modules/reservation-context/application/get-active-reservation-context.use-case.spec.ts`
+- [x] T017 [P] [US2] Add active lookup use-case tests for found context, missing context, normalized `waId`, and repository failure in `src/modules/reservation-context/application/get-active-reservation-context.use-case.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Implement active context lookup result mapping in `src/modules/reservation-context/application/get-active-reservation-context.use-case.ts`
-- [ ] T019 [US2] Register and export active lookup use-case in `src/modules/reservation-context/reservation-context.module.ts`
+- [x] T018 [US2] Implement active context lookup result mapping in `src/modules/reservation-context/application/get-active-reservation-context.use-case.ts`
+- [x] T019 [US2] Register and export active lookup use-case in `src/modules/reservation-context/reservation-context.module.ts`
 
 **Checkpoint**: User Story 2 works independently after foundational tasks and can be validated with focused tests.
 
@@ -91,14 +91,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [P] [US3] Add cancel use-case tests for affected row count, missing context no-op, normalized `waId`, and repository failure in `src/modules/reservation-context/application/cancel-reservation-context.use-case.spec.ts`
-- [ ] T021 [P] [US3] Add expire use-case tests for valid cutoff, invalid cutoff, affected row count, and repository failure in `src/modules/reservation-context/application/expire-reservation-contexts.use-case.spec.ts`
+- [x] T020 [P] [US3] Add cancel use-case tests for affected row count, missing context no-op, normalized `waId`, and repository failure in `src/modules/reservation-context/application/cancel-reservation-context.use-case.spec.ts`
+- [x] T021 [P] [US3] Add expire use-case tests for valid cutoff, invalid cutoff, affected row count, and repository failure in `src/modules/reservation-context/application/expire-reservation-contexts.use-case.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Implement cancellation orchestration in `src/modules/reservation-context/application/cancel-reservation-context.use-case.ts`
-- [ ] T023 [US3] Implement expiration orchestration and cutoff validation in `src/modules/reservation-context/application/expire-reservation-contexts.use-case.ts`
-- [ ] T024 [US3] Register and export cancel and expire use-cases in `src/modules/reservation-context/reservation-context.module.ts`
+- [x] T022 [US3] Implement cancellation orchestration in `src/modules/reservation-context/application/cancel-reservation-context.use-case.ts`
+- [x] T023 [US3] Implement expiration orchestration and cutoff validation in `src/modules/reservation-context/application/expire-reservation-contexts.use-case.ts`
+- [x] T024 [US3] Register and export cancel and expire use-cases in `src/modules/reservation-context/reservation-context.module.ts`
 
 **Checkpoint**: User Story 3 invalidation behavior is independently testable.
 
@@ -112,13 +112,13 @@
 
 ### Tests for User Story 4
 
-- [ ] T025 [P] [US4] Add privacy-focused save use-case tests that assert only structured context fields are passed to persistence in `src/modules/reservation-context/application/save-reservation-context.use-case.spec.ts`
-- [ ] T026 [P] [US4] Add validation tests for rejecting overlong or transcript-shaped `lastConversationSummary` values in `src/modules/reservation-context/service/reservation-context-validation.service.spec.ts`
+- [x] T025 [P] [US4] Add privacy-focused save use-case tests that assert only structured context fields are passed to persistence in `src/modules/reservation-context/application/save-reservation-context.use-case.spec.ts`
+- [x] T026 [P] [US4] Add validation tests for rejecting overlong or transcript-shaped `lastConversationSummary` values in `src/modules/reservation-context/service/reservation-context-validation.service.spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Add summary privacy validation rules in `src/modules/reservation-context/service/reservation-context-validation.service.ts`
-- [ ] T028 [US4] Ensure save use-case maps only allowed structured fields before repository calls in `src/modules/reservation-context/application/save-reservation-context.use-case.ts`
+- [x] T027 [US4] Add summary privacy validation rules in `src/modules/reservation-context/service/reservation-context-validation.service.ts`
+- [x] T028 [US4] Ensure save use-case maps only allowed structured fields before repository calls in `src/modules/reservation-context/application/save-reservation-context.use-case.ts`
 
 **Checkpoint**: Privacy boundary is covered by tests and save behavior remains scoped to structured context.
 
@@ -128,13 +128,13 @@
 
 **Purpose**: Documentation, cleanup, and verification across all stories.
 
-- [ ] T029 [P] Update `ReservationContextModule` responsibilities and file list in `docs/architecture/module-map.md`
-- [ ] T030 [P] Update PostgreSQL/context consistency notes in `docs/architecture/data-and-state.md`
-- [ ] T031 Review `src/modules/reservation-context/domain/repository/reservation-context.repository.ts` and move duplicated business validation only if service/use-case coverage makes it redundant
-- [ ] T032 Run `npm run fix` and correct any lint or formatting errors in touched files
-- [ ] T033 Run `npm run test:reservation-context` and fix any failing reservation-context tests
-- [ ] T034 Run `npm test` and fix any regressions caused by this feature
-- [ ] T035 Verify `specs/004-reservation-context-services/quickstart.md` acceptance checks against the implemented behavior
+- [x] T029 [P] Update `ReservationContextModule` responsibilities and file list in `docs/architecture/module-map.md`
+- [x] T030 [P] Update PostgreSQL/context consistency notes in `docs/architecture/data-and-state.md`
+- [x] T031 Review `src/modules/reservation-context/domain/repository/reservation-context.repository.ts` and move duplicated business validation only if service/use-case coverage makes it redundant
+- [x] T032 Run `npm run fix` and correct any lint or formatting errors in touched files
+- [x] T033 Run `npm run test:reservation-context` and fix any failing reservation-context tests
+- [x] T034 Run `npm test` and fix any regressions caused by this feature
+- [x] T035 Verify `specs/004-reservation-context-services/quickstart.md` acceptance checks against the implemented behavior
 
 ---
 

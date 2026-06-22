@@ -8,17 +8,17 @@ Represents an internal request to save the latest actionable reservation for one
 
 ### Fields
 
-| Field | Type | Required | Notes |
-| ----- | ---- | -------- | ----- |
-| `waId` | string | yes | WhatsApp user identifier; normalized before persistence |
-| `phone` | string | yes | Operational phone used to locate reservations; normalized before persistence |
-| `reservationDate` | string | yes | Business-facing date value |
-| `reservationTime` | string | yes | Business-facing time value |
-| `reservationStartsAt` | datetime | yes | Absolute reservation start moment |
-| `reservationEndsAt` | datetime | yes | Absolute reservation end moment |
-| `name` | string | yes | Customer name |
-| `quantity` | integer | yes | Party size |
-| `lastConversationSummary` | string | no | Optional short summary; must not be a full transcript |
+| Field                     | Type     | Required | Notes                                                                        |
+| ------------------------- | -------- | -------- | ---------------------------------------------------------------------------- |
+| `waId`                    | string   | yes      | WhatsApp user identifier; normalized before persistence                      |
+| `phone`                   | string   | yes      | Operational phone used to locate reservations; normalized before persistence |
+| `reservationDate`         | string   | yes      | Business-facing date value                                                   |
+| `reservationTime`         | string   | yes      | Business-facing time value                                                   |
+| `reservationStartsAt`     | datetime | yes      | Absolute reservation start moment                                            |
+| `reservationEndsAt`       | datetime | yes      | Absolute reservation end moment                                              |
+| `name`                    | string   | yes      | Customer name                                                                |
+| `quantity`                | integer  | yes      | Party size                                                                   |
+| `lastConversationSummary` | string   | no       | Optional short summary; must not be a full transcript                        |
 
 ### Validation Rules
 
@@ -34,20 +34,20 @@ Represents the normalized active context returned to future internal reservation
 
 ### Fields
 
-| Field | Type | Required | Notes |
-| ----- | ---- | -------- | ----- |
-| `id` | string | yes | Stored context identifier |
-| `waId` | string | yes | Normalized WhatsApp user identifier |
-| `phone` | string | yes | Normalized operational phone |
-| `reservationDate` | string | yes | Business-facing date |
-| `reservationTime` | string | yes | Business-facing time |
-| `reservationStartsAt` | datetime | yes | Absolute start moment |
-| `reservationEndsAt` | datetime | yes | Absolute end moment |
-| `name` | string | yes | Customer name |
-| `quantity` | integer | yes | Party size |
-| `lastConversationSummary` | string/null | no | Optional short summary |
-| `createdAt` | datetime | yes | Storage creation moment |
-| `updatedAt` | datetime | yes | Storage update moment |
+| Field                     | Type        | Required | Notes                               |
+| ------------------------- | ----------- | -------- | ----------------------------------- |
+| `id`                      | string      | yes      | Stored context identifier           |
+| `waId`                    | string      | yes      | Normalized WhatsApp user identifier |
+| `phone`                   | string      | yes      | Normalized operational phone        |
+| `reservationDate`         | string      | yes      | Business-facing date                |
+| `reservationTime`         | string      | yes      | Business-facing time                |
+| `reservationStartsAt`     | datetime    | yes      | Absolute start moment               |
+| `reservationEndsAt`       | datetime    | yes      | Absolute end moment                 |
+| `name`                    | string      | yes      | Customer name                       |
+| `quantity`                | integer     | yes      | Party size                          |
+| `lastConversationSummary` | string/null | no       | Optional short summary              |
+| `createdAt`               | datetime    | yes      | Storage creation moment             |
+| `updatedAt`               | datetime    | yes      | Storage update moment               |
 
 ### Validation Rules
 
@@ -60,10 +60,10 @@ Represents the expected result when no actionable context exists.
 
 ### Fields
 
-| Field | Type | Required | Notes |
-| ----- | ---- | -------- | ----- |
-| `found` | boolean | yes | `false` when no actionable context is available |
-| `reason` | enum | yes | Expected values: `not_found`, `cancelled`, `expired`, `already_ended`, or generic absence when storage cannot distinguish |
+| Field    | Type    | Required | Notes                                                                                                                     |
+| -------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `found`  | boolean | yes      | `false` when no actionable context is available                                                                           |
+| `reason` | enum    | yes      | Expected values: `not_found`, `cancelled`, `expired`, `already_ended`, or generic absence when storage cannot distinguish |
 
 ### Validation Rules
 
@@ -76,13 +76,13 @@ Represents the outcome of save, cancel, or expire operations.
 
 ### Fields
 
-| Field | Type | Required | Notes |
-| ----- | ---- | -------- | ----- |
-| `success` | boolean | yes | Whether the requested operation completed |
-| `context` | Reservation Context Result | no | Present when a save returns an active context |
-| `affected` | integer | no | Number of contexts invalidated by cancel/expire operations |
-| `errorCode` | enum | no | Stable error code for validation or persistence failure |
-| `message` | string | no | Human-readable diagnostic for logs/callers |
+| Field       | Type                       | Required | Notes                                                      |
+| ----------- | -------------------------- | -------- | ---------------------------------------------------------- |
+| `success`   | boolean                    | yes      | Whether the requested operation completed                  |
+| `context`   | Reservation Context Result | no       | Present when a save returns an active context              |
+| `affected`  | integer                    | no       | Number of contexts invalidated by cancel/expire operations |
+| `errorCode` | enum                       | no       | Stable error code for validation or persistence failure    |
+| `message`   | string                     | no       | Human-readable diagnostic for logs/callers                 |
 
 ### Validation Rules
 
