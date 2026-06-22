@@ -32,7 +32,7 @@ npm run fix
 Run focused tests:
 
 ```bash
-npm test -- src/modules/reservation-context
+npm run test:reservation-context
 ```
 
 Run the full suite when the focused tests pass:

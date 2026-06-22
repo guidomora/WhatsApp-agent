@@ -107,9 +107,9 @@
 - [x] T021 [P] Update PostgreSQL schema documentation for `reservation_contexts` in `docs/architecture/postgresql-schema.md`
 - [x] T022 [P] Update data/state documentation to mention persisted reservation context in PostgreSQL in `docs/architecture/data-and-state.md`
 - [x] T023 [P] Update module map documentation for `ReservationContextModule` in `docs/architecture/module-map.md`
-- [X] T024 Run formatting and linting for `src/modules/reservation-context/`, `src/lib/types/reservation-context/`, and `src/database/migrations/20260622000000-CreateReservationContextsTable.ts` with `npm run fix`
-- [X] T025 Run full test suite for `src/` with `npm test`
-- [X] T026 Verify no live WhatsApp create/update/cancel flow integration was added in `src/modules/reservations/` and `src/modules/whatsapp/`
+- [x] T024 Run formatting and linting for `src/modules/reservation-context/`, `src/lib/types/reservation-context/`, and `src/database/migrations/20260622000000-CreateReservationContextsTable.ts` with `npm run fix`
+- [x] T025 Run full test suite for `src/` with `npm test`
+- [x] T026 Verify no live WhatsApp create/update/cancel flow integration was added in `src/modules/reservations/` and `src/modules/whatsapp/`
 
 ---
 
