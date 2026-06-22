@@ -120,10 +120,10 @@
 **Purpose**: Final validation, documentation, and cleanup across all stories.
 
 - [x] T036 [P] Update the billing module entry in `docs/architecture/module-map.md` if the implemented ownership boundaries changed documented files
-- [X] T037 [P] Run formatting and lint fixes with `npm run fix` and review changes in `src/modules/billing-usage/service/usage-limit.service.ts`
-- [X] T038 Run focused billing tests with `npm test -- src/modules/billing-usage` and record results in `specs/001-billing-layers/quickstart.md`
-- [X] T039 Run the full test suite with `npm test` and record results in `specs/001-billing-layers/quickstart.md`
-- [X] T040 Review final diff for unrelated changes and scope compliance in `specs/001-billing-layers/plan.md`
+- [x] T037 [P] Run formatting and lint fixes with `npm run fix` and review changes in `src/modules/billing-usage/service/usage-limit.service.ts`
+- [x] T038 Run focused billing tests with `npm test -- src/modules/billing-usage` and record results in `specs/001-billing-layers/quickstart.md`
+- [x] T039 Run the full test suite with `npm test` and record results in `specs/001-billing-layers/quickstart.md`
+- [x] T040 Review final diff for unrelated changes and scope compliance in `specs/001-billing-layers/plan.md`
 
 ---
 

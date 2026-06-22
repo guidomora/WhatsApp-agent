@@ -8,6 +8,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { DatesModule } from './modules/dates/dates.module';
 import { GoogleSheetsModule } from './modules/google-sheets/google-sheets.module';
 import { HealthModule } from './modules/health/health.module';
+import { ReservationContextModule } from './modules/reservation-context/reservation-context.module';
 import { ReservationJobsModule } from './modules/reservation-jobs/reservation-jobs.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
 import { WhatsAppModule } from './modules/whatsapp/whatsapp.module';
@@ -21,6 +22,7 @@ import { WhatsAppModule } from './modules/whatsapp/whatsapp.module';
     }),
     DatabaseModule,
     BillingUsageModule,
+    ReservationContextModule,
     ReservationsModule,
     GoogleSheetsModule.forRoot(),
     DatesModule,

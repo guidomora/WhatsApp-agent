@@ -114,10 +114,10 @@
 
 - [x] T029 [P] Update `docs/architecture/module-map.md` to include the new billing usage endpoint and common guard location
 - [x] T030 [P] Update `docs/architecture/security-and-resilience.md` to document the billing usage internal endpoint protected by `x-internal-api-token`
-- [X] T031 Run `npm run fix` and address any lint/format errors
-- [X] T032 Run focused tests with `npm test -- src/modules/billing-usage src/common/guards src/modules/reservations` and fix failures
-- [X] T033 Run broader existing tests if focused changes affect shared guard behavior with `npm test -- --runInBand`
-- [X] T034 Validate quickstart manually or through controller tests against `specs/002-limit-endpoint/quickstart.md`
+- [x] T031 Run `npm run fix` and address any lint/format errors
+- [x] T032 Run focused tests with `npm test -- src/modules/billing-usage src/common/guards src/modules/reservations` and fix failures
+- [x] T033 Run broader existing tests if focused changes affect shared guard behavior with `npm test -- --runInBand`
+- [x] T034 Validate quickstart manually or through controller tests against `specs/002-limit-endpoint/quickstart.md`
 
 ---
 
