@@ -80,6 +80,6 @@ Si se modifica comportamiento, actualizar tambien la documentacion correspondien
 
 <!-- SPECKIT START -->
 
-Active feature plan: `specs/003-reservation-context-storage/plan.md`
+Active feature plan: `specs/004-reservation-context-services/plan.md`
 
 <!-- SPECKIT END -->

@@ -163,7 +163,8 @@ Responsabilidad:
 
 - Persistir el snapshot estructurado de la ultima reserva accionable por usuario de WhatsApp.
 - Mantener como maximo un contexto por `waId`.
-- Exponer operaciones internas para guardar, recuperar, cancelar o expirar contextos.
+- Exponer casos de uso internos para guardar, recuperar, cancelar o expirar contextos.
+- Normalizar identificadores de WhatsApp/telefono y validar datos obligatorios antes de persistir.
 - Preparar la continuidad conversacional despues de expirar la cache, sin conectar todavia con los flujos vivos.
 
 Dependencias:
@@ -173,6 +174,12 @@ Dependencias:
 Archivos clave:
 
 - `src/modules/reservation-context/reservation-context.module.ts`
+- `src/modules/reservation-context/application/save-reservation-context.use-case.ts`
+- `src/modules/reservation-context/application/get-active-reservation-context.use-case.ts`
+- `src/modules/reservation-context/application/cancel-reservation-context.use-case.ts`
+- `src/modules/reservation-context/application/expire-reservation-contexts.use-case.ts`
+- `src/modules/reservation-context/service/reservation-context-normalizer.service.ts`
+- `src/modules/reservation-context/service/reservation-context-validation.service.ts`
 - `src/modules/reservation-context/entities/reservation-context.entity.ts`
 - `src/modules/reservation-context/domain/repository/reservation-context.repository.ts`
 - `src/lib/types/reservation-context/*`

@@ -88,6 +88,8 @@ Reglas:
 - Si el job ya fue encolado y falla la espera del resultado, el cupo queda reservado para evitar subcontabilizar una reserva con resultado desconocido.
 - La migracion inicial crea `account` default, plan `mvp_default` y suscripcion activa de MVP.
 - `reservation_contexts` mantiene como maximo un contexto por `waId` y no guarda el transcript completo de WhatsApp.
+- `ReservationContextModule` expone casos de uso internos para guardar, consultar, cancelar y expirar este contexto auxiliar. Antes de persistir, normaliza `waId`/telefono y valida datos obligatorios, cantidad, ventana temporal y que el resumen opcional no sea un transcript completo.
+- La capa de aplicacion devuelve ausencia explicita cuando no hay contexto accionable; no infiere datos desde historial conversacional ni modifica todavia los flujos vivos de WhatsApp.
 
 Codigo relacionado:
 
@@ -96,6 +98,8 @@ Codigo relacionado:
 - `src/modules/billing-usage/billing-usage.module.ts`
 - `src/modules/billing-usage/service/usage-limit.service.ts`
 - `src/modules/billing-usage/entities/*`
+- `src/modules/reservation-context/application/*`
+- `src/modules/reservation-context/service/*`
 - `src/modules/reservation-context/entities/*`
 - `src/modules/reservation-context/domain/repository/reservation-context.repository.ts`
 - `src/database/migrations/*`
